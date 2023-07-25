@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Heart Disease Prediction</title>
+  <style>
+    body {
+      background-image: url('static/istok_heart.jpg');
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 20px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+    .form-group label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .form-group input {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+    .submit-button {
+      display: flex;
+      justify-content: right;
+      margin-top: 20px;
+      padding-right: 500px;
+      padding-bottom: 20px;
+    }
+    .submit-button button {
+      background-color: #f6b93b;
+      color: #ffffff;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    .submit-button button:hover {
+      
+      background-color: #f3a216;
+    }
+    .main_heading{
+      font-size: 50px;
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      color: #ccc;
+
+    }
+    .prediction{
+      margin-left: 400px;
+      width: 500px;
+      height: auto;
+      background-color:#ccc;
+      border-radius: 10px;
+      font-size: 20px;
+      color: #492730;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="text-align: left; " class="main_heading">Heart Disease Prediction</h1>
+  <div class="container">
+    
+    <form id="hdform" action="{{ url_for('predict')}}" method="post">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Age:</label>
+          <input type="text" name="age" required>
+        </div>
+        <div class="form-group">
+          <label>Resting Blood Pressure (mm Hg):</label>
+          <input type="text" name="trestbps" required>
+        </div>
+        <div class="form-group">
+          <label>Serum Cholesterol (mg/dL):</label>
+          <input type="text" name="chol" required>
+        </div>
+        <div class="form-group">
+          <label>Maximum Heart Rate Achieved:</label>
+          <input type="text" name="thalach" required>
+        </div>
+        <div class="form-group">
+          <label>ST Depression Induced by Exercise:</label>
+          <input type="text" name="oldpeak" required>
+        </div>
+        <div class="form-group">
+          <label>Sex (0 for Female, 1 for Male):</label>
+          <input type="text" name="sex_0" list="sex_list" required>
+          <datalist id="sex_list">
+            <option value="0">
+            <option value="1">
+
+          </datalist>
+        </div>
+        <div class="form-group">
+          <label>Chest Pain Type (0 for Typical Angina, 1 for Atypical Angina, 2 for Non-Anginal Pain, 3 for Asymptomatic):</label>
+          <input type="text" name="cp_0" list="cp" required>
+          <datalist id="cp">
+            <option value="0">
+            <option value="1">
+            <option value="2">
+            <option value="3">
+          </datalist>
+        </div>
+        <div class="form-group">
+          <label>Fasting Blood Sugar > 120 mg/dL (0 for No, 1 for Yes):</label>
+          <input type="text" name="fbs_0" list="fbs" required>
+          <datalist id="fbs">
+            <option value="0">
+            <option value="1">
+              
+          </datalist>
+        </div>
+        <div class="form-group">
+          <label>Resting Electrocardiographic Results (0 for Normal, 1 for Abnormality, 2 for Probable or Definite Hypertrophy):</label>
+          <input type="text" name="restecg_0" list="restecg" required>
+          <datalist id="restecg">
+            <option value="0">
+            <option value="1">
+            <option value="2">
+          </datalist>
+        </div>
+        <div class="form-group">
+          <label>Exercise Induced Angina (0 for No, 1 for Yes):</label>
+          <input type="text" name="exang_0" list="exang" required>
+          <datalist id="exang">
+            <option value="0"></option>
+            <option value="1"></option>
+          </datalist>
+        </div>
+        <div class="form-group">
+          <label>Slope of the Peak Exercise ST Segment (0 for Upsloping, 1 for Flat, 2 for Downsloping):</label>
+          <input type="text" name="slope_0" list="slope" required>
+          <datalist id="slope">
+            <option value="0">
+            <option value="1">
+            <option value="2">
+          </datalist>
+        </div>
+        <div class="form-group">
+          <label>Number of Major Vessels Colored by Fluoroscopy (0, 1, 2):</label>
+          <input type="text" name="ca_0" list="ca" required>
+          <datalist id="ca">
+            <option value="0">
+            <option value="1">
+            <option value="2">
+          </datalist>
+        </div>
+        <div class="form-group">
+          <label>Thalassemia (1, 2, 3):</label>
+          <input type="text" name="thal_1" list="thal" required>
+          <datalist id="thal">
+            <option value="1">
+            <option value="2">
+            <option value="3">
+          </datalist>
+        </div>
+      </div>
+      <div class="submit-button">
+        <button type="submit">Predict Heart Disease</button>
+      </div>
+      <div class="prediction">
+        <h2>{{ prediction_text }}</h2>
+      </div>
+    </form>
+
+   
+  </div>
+  
+</body>
+
+</html>
